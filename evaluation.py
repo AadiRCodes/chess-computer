@@ -12,9 +12,9 @@ PIECEVALUES = {
 pawn_dicts = (piece_tables.convert_to_dict(chess.PAWN, chess.WHITE),piece_tables.convert_to_dict(chess.PAWN, chess.BLACK))
 knight_dicts = (piece_tables.convert_to_dict(chess.KNIGHT, chess.WHITE),piece_tables.convert_to_dict(chess.KNIGHT, chess.BLACK))
 bishop_dicts = (piece_tables.convert_to_dict(chess.BISHOP, chess.WHITE),piece_tables.convert_to_dict(chess.BISHOP, chess.BLACK))
-rook_dicts = (piece_tables.convert_to_dict(chess.PAWN, chess.WHITE),piece_tables.convert_to_dict(chess.PAWN, chess.BLACK))
-queen_dicts = (piece_tables.convert_to_dict(chess.PAWN, chess.WHITE),piece_tables.convert_to_dict(chess.PAWN, chess.BLACK))
-king_dicts = (piece_tables.convert_to_dict(chess.PAWN, chess.WHITE),piece_tables.convert_to_dict(chess.PAWN, chess.BLACK))
+rook_dicts = (piece_tables.convert_to_dict(chess.ROOK, chess.WHITE),piece_tables.convert_to_dict(chess.ROOK, chess.BLACK))
+queen_dicts = (piece_tables.convert_to_dict(chess.QUEEN, chess.WHITE),piece_tables.convert_to_dict(chess.QUEEN, chess.BLACK))
+king_dicts = (piece_tables.convert_to_dict(chess.KING, chess.WHITE),piece_tables.convert_to_dict(chess.KING, chess.BLACK))
 
 def material_score(board: chess.Board) -> int:
     """Returns the total numerical score of the material of White and Black, and returns as a tuple.
@@ -36,5 +36,10 @@ def material_score(board: chess.Board) -> int:
             else:
                 black_material += PIECEVALUES[piece.piece_type]
     return (white_material, black_material) 
+
+def evaluate(board: chess.Board) -> float:
+    material = material_score(board)
+    return 1000*(material[0]-material[1])
+
 
 

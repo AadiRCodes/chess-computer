@@ -74,7 +74,7 @@ def convert_to_dict(pieceType: chess.PieceType, color: chess.Color) -> dict:
             for square in chess.SQUARES:
                 row = square//8
                 col = 7-(square%8)
-                converted_dict[square] = array[row][col]
+                converted_dict[square] = -array[row][col]
         return converted_dict
     if pieceType == chess.PAWN:
         return conversion(PAWN_TABLE, color)
