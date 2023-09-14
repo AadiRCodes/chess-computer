@@ -7,9 +7,12 @@ pos_hash = chess.polyglot.zobrist_hash
 def max_value(board, depth, alpha, beta):
     score = float("-inf")
     best_move = None
-    ordered_moves = move_ordering(board, board.legal_moves)
+    ordered_moves = move_ordering(board, list(board.legal_moves))
     for move in ordered_moves:
         board.push(move)
+        global n
+        n+=1
+        print("Call", n)
         if board.is_checkmate():
             board.pop()
             return (move, float("inf"))
@@ -32,9 +35,12 @@ def max_value(board, depth, alpha, beta):
 def min_value(board, depth, alpha, beta):
     score = float("inf")
     best_move = None
-    ordered_moves = move_ordering(board, board.legal_moves)
+    ordered_moves = move_ordering(board, list(board.legal_moves))
     for move in ordered_moves:
         board.push(move)
+        global n
+        n+=1
+        print("Call", n)
         if board.is_checkmate():
             board.pop()
             return (move, float("-inf"))
@@ -54,9 +60,6 @@ def min_value(board, depth, alpha, beta):
     return (best_move, score)
 
 def minimax(board, depth, is_maximizing, alpha, beta):
-    global n
-    n+=1
-    print("Call", n)
     if depth == 0 or board.is_game_over():
         return (None, evaluate(board))
     elif is_maximizing:
@@ -84,4 +87,4 @@ def move_ordering(board, moves):
     checks = [move for move in moves if is_check(board, move)]
     captures = [move for move in moves if is_capture(board, move)]
     ordered_moves = [move for move in moves if (move not in promotions) or (move not in checks) or (move not in captures)]
-    return ordered_moves
+    return promotions+checks+captures+ordered_moves
