@@ -26,20 +26,16 @@ def material_score(board: chess.Board) -> int:
     In a Queen v. Pawn ending (White has a queen and king and Black has a king and pawn), we should have
     (30900, 30100).
     """
-    white_material = 0
-    black_material = 0
-    for square in chess.SQUARES:
-        piece = board.piece_at(square)
-        if piece != None:
-            if piece.color == chess.WHITE:
-                white_material += PIECEVALUES[piece.piece_type]
-            else:
-                black_material += PIECEVALUES[piece.piece_type]
-    return (white_material, black_material) 
+    diff = 0
+    for piece in PIECEVALUES.keys():
+        diff+=len(board.pieces(piece, chess.WHITE))*PIECEVALUES[piece]
+        diff-=len(board.pieces(piece, chess.BLACK))*PIECEVALUES[piece]
+    return diff
+
 
 def evaluate(board: chess.Board) -> float:
     material = material_score(board)
-    return 1000*(material[0]-material[1])
+    return 1000*(material)
 
 
 
