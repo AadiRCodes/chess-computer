@@ -4,7 +4,8 @@ from evaluation import evaluate
 def max_value(board, depth, alpha, beta):
     score = float("-inf")
     best_move = None
-    for move in board.legal_moves:
+    ordered_moves = move_ordering(board, board.legal_moves)
+    for move in ordered_moves:
         board.push(move)
         nextScore = minimax(board, depth-1, False, alpha, beta)[1]
         if nextScore > score:
@@ -19,7 +20,8 @@ def max_value(board, depth, alpha, beta):
 def min_value(board, depth, alpha, beta):
     score = float("inf")
     best_move = None
-    for move in board.legal_moves:
+    ordered_moves = move_ordering(board, board.legal_moves)
+    for move in ordered_moves:
         board.push(move)
         nextScore = minimax(board, depth-1, True, alpha, beta)[1]
         if nextScore < score:
@@ -45,3 +47,13 @@ def make_move(board, depth=4):
         return minimax(board, depth, True, float("-inf"), float("inf"))[0]
     if board.turn == chess.BLACK:
         return minimax(board, depth, False, float("-inf"), float("inf"))[0]
+
+def move_ordering(board, moves):
+    ordered_moves = [move for move in moves]
+    def eval_move(board, move):
+        board.push(move)
+        score = evaluate(board)
+        board.pop()
+        return score
+    list.sort(ordered_moves, key=lambda move: eval_move(board, move))
+    return ordered_moves
